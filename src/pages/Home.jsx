@@ -1,23 +1,38 @@
 import { onSnapshot } from "firebase/firestore";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import ImgSlider from "../components/ImgSlider";
 import Movies from "../components/Movies";
 import Viewers from "../components/Viewers";
-import { setMovies } from "../features/movie/movieSlice";
+import { selectMovies, setMovies } from "../features/movie/movieSlice";
 import { colRef } from "../firebase";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const movies = useSelector(selectMovies);
+
   useEffect(() => {
     onSnapshot(colRef, (snapshot) => {
-      let tempMovies = snapshot.docs.map((doc) => {
-        return {
-          id: doc.id,
-          ...doc.data(),
-        };
-      });
+      let tempMovies = snapshot.docs
+        .map((doc) => {
+          return {
+            id: doc.id,
+            ...doc.data(),
+          };
+        })
+        .reduce((acc, movie) => {
+          if (acc[movie.type]) {
+            return {
+              ...acc,
+              [movie.type]: [...acc[movie.type], movie],
+            };
+          }
+          return {
+            ...acc,
+            [movie.type]: [movie],
+          };
+        }, {});
 
       dispatch(setMovies(tempMovies));
     });
@@ -27,7 +42,16 @@ const Home = () => {
     <Container>
       <ImgSlider />
       <Viewers />
-      <Movies />
+      {movies && (
+        <>
+          <Movies title="Recommended for You" movies={movies["popular"]} />
+          <Movies title="New to Disney +" movies={movies["newTo"]} />
+          <Movies title="Original" movies={movies["original"]} />
+          <Movies title="Trending" movies={movies["trending"]} />
+          <Movies title="Kids TV" movies={movies["kidsTv"]} />
+          <Movies title="Hollywood" movies={movies["hollywood"]} />
+        </>
+      )}
     </Container>
   );
 };

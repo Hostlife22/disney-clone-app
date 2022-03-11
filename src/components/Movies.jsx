@@ -1,24 +1,26 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { selectMovies } from "../features/movie/movieSlice";
 
-const Movies = () => {
-  const movies = useSelector(selectMovies);
+const Movies = ({ title, movies }) => {
+  const mixMovies = ((moviesArr) =>
+    moviesArr
+      .map((movie) => [Math.random(), movie])
+      .sort()
+      .map((movie) => movie[1])
+      .slice(0, 8))(movies);
 
   return (
     <Container>
-      <h4>Recommended for You</h4>
+      <h4>{title}</h4>
       <Content>
-        {movies &&
-          movies.map((movie) => (
-            <Wrap key={movie.id}>
-              <Link to={`/detail/${movie.id}`}>
-                <img src={movie.cardImg} alt={movie.title} />
-              </Link>
-            </Wrap>
-          ))}
+        {mixMovies.map((movie) => (
+          <Wrap key={movie.id}>
+            <Link to={`/detail/${movie.id}`}>
+              <img src={movie.cardImg} alt={movie.title} />
+            </Link>
+          </Wrap>
+        ))}
       </Content>
     </Container>
   );
@@ -29,9 +31,14 @@ export default Movies;
 const Container = styled.div``;
 
 const Content = styled.div`
+  padding: 0 0 26px;
   display: grid;
   grid-gap: 25px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 `;
 
 const Wrap = styled.div`
