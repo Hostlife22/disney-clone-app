@@ -2,6 +2,10 @@
 
 ### [Site link](https://disney-clone-43d3c.web.app/login)
 
+<kbd>
+  <img align="right" alt="img" src="1bfksBe.jpeg"  />
+</kbd>
+
  ### 🛠 The tech stack is:
 
 
