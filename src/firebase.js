@@ -14,7 +14,7 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 
-const db = getFirestore();
+ const db = getFirestore();
 const auth = getAuth();
 
 const colRef = collection(db, "movies");

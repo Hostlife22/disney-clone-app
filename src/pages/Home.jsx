@@ -1,5 +1,5 @@
 import { onSnapshot } from "firebase/firestore";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import ImgSlider from "../components/ImgSlider";
